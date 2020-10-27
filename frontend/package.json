@@ -5,7 +5,7 @@
     "ng": "npx ng",
     "start": "npx ng serve",
     "build": "npx ng build --prod --base-href /Interest/",
-    "test": "npx ng test",
+    "test": "npx ng test  --watch=false --browsers ChromeHeadless",
     "lint": "npx ng lint",
     "e2e": "npx ng e2e",
     "prepare": "npm run build",
