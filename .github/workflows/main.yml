@@ -1,0 +1,53 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish-githubpage:
+    name: Publish Github Page Flow.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: run build
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm test
+          npm run build
+  commit-changes:
+    name: Commit All Changes From Publish Github Pages.
+    needs: publish-githubpage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: generate githubpage from github workflow.
+  create-release:
+    name: Create release tag flow.
+    needs: commit-changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - Please refer to changelog.md
+          draft: false
+          prerelease: false
+  
