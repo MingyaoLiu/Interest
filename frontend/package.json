@@ -7,7 +7,12 @@
     "build": "npx ng build --prod --base-href /frontend/",
     "test": "npx ng test",
     "lint": "npx ng lint",
-    "e2e": "npx ng e2e"
+    "e2e": "npx ng e2e",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "git add .",
+    "postversion": "git push && git push --tags"
   },
   "private": true,
   "dependencies": {
