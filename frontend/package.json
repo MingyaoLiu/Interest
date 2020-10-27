@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "npx ng",
     "start": "npx ng serve",
-    "build": "npx ng build --prod --base-href https://mingyaoliu.github.io/Interest/",
+    "build": "npx ng build --prod --base-href 'https://mingyaoliu.github.io/Interest/'",
     "test": "npx ng test",
     "lint": "npx ng lint",
     "e2e": "npx ng e2e"
