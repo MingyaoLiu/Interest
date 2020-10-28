@@ -8,7 +8,13 @@ import { WindowRef } from './services/win-ref.service';
 
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { ListPanelComponent } from './list-panel/list-panel.component'
+import { ListPanelComponent } from './list-panel/list-panel.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { MatSliderModule } from '@angular/material/slider';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatCardModule} from '@angular/material/card';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -20,6 +26,12 @@ import { ListPanelComponent } from './list-panel/list-panel.component'
     AppRoutingModule,
     GoogleMapsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    MatSliderModule,
+    MatProgressBarModule,
+    MatCardModule,
+    MatPaginatorModule,
+    ScrollingModule,
   ],
   
   providers: [WindowRef],

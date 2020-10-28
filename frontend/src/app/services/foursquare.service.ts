@@ -114,7 +114,7 @@ export class FoursquareService {
     })
   }
 
-  public async getInterestXHR(loc: google.maps.LatLngLiteral) {
+  public async getInterestXHR(loc: google.maps.LatLngLiteral, radius: number) {
     return new Promise(async (resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.withCredentials = false; 
@@ -129,7 +129,7 @@ export class FoursquareService {
           }
         }
       });
-      xhr.open("GET", "https://api.foursquare.com/v2/venues/explore?intent=browse&limit=30&client_id=VIL0PPC5YZTJUU0TWN5WJEBWNAKISARNPKDEIBOAFBIRODWA&client_secret=UBI3KWU0NVJK0MJJF5LPLIFUZJ5ZZBJQLSAV1GTZGPITFZZN&v=20190425&radius=1000&ll=" + loc.lat + ',' + loc.lng);
+      xhr.open("GET", "https://api.foursquare.com/v2/venues/explore?intent=browse&limit=50&client_id=VIL0PPC5YZTJUU0TWN5WJEBWNAKISARNPKDEIBOAFBIRODWA&client_secret=UBI3KWU0NVJK0MJJF5LPLIFUZJ5ZZBJQLSAV1GTZGPITFZZN&v=20190425&radius=" + radius + "&ll=" + loc.lat + ',' + loc.lng);
       xhr.send();
     })
   }

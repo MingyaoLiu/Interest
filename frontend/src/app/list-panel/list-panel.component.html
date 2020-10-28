@@ -1,1 +1,10 @@
-<p>list-panel works!</p>
+
+<mat-progress-bar mode="indeterminate" *ngIf="isLoadingProgress" style="margin-left: 5%; width: 90%"></mat-progress-bar>
+<div *ngIf="isLoadingProgress" style="margin-left: 5%; width: 90%">Loading...</div>
+<div *ngIf="!isLoadingProgress && dataArr.length > 0" style="margin-left: 5%; width: 90%">Nearby Interests:</div>
+<cdk-virtual-scroll-viewport id="interest_scroll_container" itemSize="50">
+    <mat-card *cdkVirtualFor="let data of dataArr" style="margin-top: 10px">
+        <mat-card-title>{{data.title}}</mat-card-title>
+        <mat-card-subtitle>{{data.desc}}</mat-card-subtitle>
+    </mat-card>
+  </cdk-virtual-scroll-viewport>

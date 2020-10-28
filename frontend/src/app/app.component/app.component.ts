@@ -1,5 +1,6 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, ViewRef } from '@angular/core';
 import { GoogleMap } from '@angular/google-maps';
+import { ListPanelComponent } from '../list-panel/list-panel.component';
 import { FoursquareService } from '../services/foursquare.service';
 import { WindowRef } from '../services/win-ref.service'
 
@@ -16,10 +17,13 @@ export class AppComponent {
     lng: -80.57978880000002
   }
   markers = [];
+  listData = [];
   fsService: FoursquareService;
+  lockStartDate = undefined;
 
   @ViewChild("gmapView") gmap: GoogleMap;
 
+  @ViewChild("listPanel") listView: ListPanelComponent;
 
   options: google.maps.MapOptions = {
     zoomControl: false,
@@ -37,28 +41,28 @@ export class AppComponent {
     navigator.geolocation.getCurrentPosition((position)=>{
       const longitude = position.coords.longitude;
       const latitude = position.coords.latitude;
-
       this.center = {
         lat: latitude,
         lng: longitude,
       }
+      this.getNewData()
     });
   };
 
   ngAfterViewInit(){
     this.getNewData()
-    console.log(this.gmap)
   }
 
-  lockStartDate = new Date(0);
+
+  private getRoughRadius = (viewBound: google.maps.LatLngBounds) => { // Very inaccurate distance calc.
+    return Math.abs(viewBound['Ya'].i - viewBound['Ya'].j) * 40000000 / 960
+  }
 
   private async getNewData() {
     try {
 
-      if (new Date().getTime() - this.lockStartDate.getTime() < 2000) { // To limit the amount of API call to foursquare on free tier plan.
-        return setTimeout(() => { 
-          this.getNewData()
-        }, 1000)
+      if (this.lockStartDate && (new Date().getTime() - this.lockStartDate.getTime() < 2000)) { // To limit the amount of API call to foursquare on free tier plan.
+        return;
       }
 
       this.lockStartDate = new Date()
@@ -66,10 +70,16 @@ export class AppComponent {
         lat: this.gmap.getCenter().lat(),
         lng: this.gmap.getCenter().lng(),
       }
-      const res = await this.fsService.getInterestXHR(currentCenter);
-
+      let currentRad = 1000
+      try {
+        currentRad = this.getRoughRadius(this.gmap.getBounds())
+      } catch (err) {
+        console.log(err)
+      }
+      const res = await this.fsService.getInterestXHR(currentCenter, currentRad);
 
       const venues = res["response"].groups[0].items
+      console.log(venues)
       const venueListLength = venues.length;
       this.markers = []
       this.markers = venues.map((elem, index) => {
@@ -88,27 +98,27 @@ export class AppComponent {
             }
             return newMarker;
       });
-      this.lockStartDate = new Date(0);
+      this.listData = venues.map((elem, index) => {
+        const newDataPoint = {
+          title: elem.venue.name,
+          desc: elem.venue.location.address
+        }
+        return newDataPoint;
+      })
+      this.lockStartDate = undefined;
     } catch (err) {
       console.log(err);
-      this.lockStartDate = new Date(0);
+      this.lockStartDate = undefined;
     }
-
-      
   }
 
   mouseDragStartEvt(evt) {
-    console.log("Drag start, cancel all existing data resolve.")
-    console.log(evt)
   }
 
   mouseDragEndEvt($event) {
-    console.log("drag end, find interest based on current center point location.")
     this.getNewData()
   }
 
   mapCenterChangedEvt(evt) { // not used, as it doesn't help with deacceleration end.
-    console.log("CENTER CHANGE")
-    console.log(evt)
   }
 }
