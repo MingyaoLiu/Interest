@@ -1,3 +1,6 @@
 export const environment = {
-  production: true
+  production: true,
+  fs_c_id: 'VIL0PPC5YZTJUU0TWN5WJEBWNAKISARNPKDEIBOAFBIRODWA',
+  fs_c_scrt: 'UBI3KWU0NVJK0MJJF5LPLIFUZJ5ZZBJQLSAV1GTZGPITFZZN',
+  g_map: 'AIzaSyA0KPX1-8o-lbxnmAP8Ra7hbPGNjyqZTCw'
 };

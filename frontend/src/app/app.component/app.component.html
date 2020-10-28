@@ -1,0 +1,27 @@
+<div style="height: 100%; width: 100%; position: absolute; overflow: hidden">
+
+  <google-map #gmapView height="100%"
+  width="100%"
+  [zoom]="zoom"
+  [(center)]="center" 
+  [options]='options' 
+  (mapDragstart)="mouseDragStartEvt($event)" 
+  (mapDragend)="mouseDragEndEvt($event)" 
+  (centerChanged)="mapCenterChangedEvt($event)"
+  >
+    <map-marker
+      *ngFor="let marker of markers"
+      [position]="marker.position"
+      [label]="marker.label"
+      [title]="marker.title"
+      [options]="marker.options"
+    >
+    </map-marker>
+  </google-map>
+</div>
+
+<app-list-panel style="height: 200px; width: 100px; display: block; position: fixed; ">
+
+</app-list-panel>
+
+<router-outlet></router-outlet>
