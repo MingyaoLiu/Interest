@@ -20,6 +20,7 @@ export class AppComponent {
   listData = [];
   fsService: FoursquareService;
   lockStartDate = undefined;
+  selectedIndex = -1;
 
   @ViewChild("gmapView") gmap: GoogleMap;
 
@@ -33,12 +34,13 @@ export class AppComponent {
     minZoom: 13,
     disableDefaultUI: true,
   }
+
   constructor(_fsService: FoursquareService) {
     this.fsService = _fsService
   }
 
   ngOnInit() {
-    navigator.geolocation.getCurrentPosition((position)=>{
+    navigator.geolocation.getCurrentPosition((position) => {
       const longitude = position.coords.longitude;
       const latitude = position.coords.latitude;
       this.center = {
@@ -49,7 +51,7 @@ export class AppComponent {
     });
   };
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.getNewData()
   }
 
@@ -79,24 +81,26 @@ export class AppComponent {
       const res = await this.fsService.getInterestXHR(currentCenter, currentRad);
 
       const venues = res["response"].groups[0].items
-      console.log(venues)
       const venueListLength = venues.length;
       this.markers = []
       this.markers = venues.map((elem, index) => {
-            const newMarker = {
-              position: {
-                lat: elem.venue.location.lat,
-                lng: elem.venue.location.lng,
-              },
-              label: {
-                color: 'red',
-                text: ' '
-              },
-              title: elem.venue.name,
-              options: { animation: google.maps.Animation.DROP },
-              zIndex: venueListLength - index 
-            }
-            return newMarker;
+        const newMarker = {
+          position: {
+            lat: elem.venue.location.lat,
+            lng: elem.venue.location.lng,
+          },
+          label: {
+            color: 'red',
+            text: ' '
+          },
+          title: elem.venue.name,
+          options: {
+            animation: google.maps.Animation.DROP,
+            opacity: 1
+          },
+          zIndex: venueListLength - index
+        }
+        return newMarker;
       });
       this.listData = venues.map((elem, index) => {
         const newDataPoint = {
@@ -105,11 +109,34 @@ export class AppComponent {
         }
         return newDataPoint;
       })
+      this.selectedIndex = -1
+      this.listView.currentSelectedIndex = -1
       this.lockStartDate = undefined;
+
+
     } catch (err) {
       console.log(err);
+      this.selectedIndex = -1
+      this.listView.currentSelectedIndex = -1
       this.lockStartDate = undefined;
     }
+  }
+
+
+  highlightInterest(index) {
+    this.markers.forEach((elem, index2) => {
+      if (index2 === index) {
+        elem.options = {
+          animation: google.maps.Animation.BOUNCE,
+          opacity: 1
+        };
+      } else {
+        elem.options = {
+          animation: 0,
+          opacity: 0.3
+        };
+      }
+    })
   }
 
   mouseDragStartEvt(evt) {

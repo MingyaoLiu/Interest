@@ -1,4 +1,4 @@
-import { Component, OnInit, Input  } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-list-panel',
@@ -9,14 +9,19 @@ export class ListPanelComponent implements OnInit {
 
   @Input("data") dataArr;
   @Input("isLoading") isLoadingProgress;
+  @Output() onInterestPicked = new EventEmitter<number>();
+  @Input("currentSelectedIndex") currentSelectedIndex;
   constructor() { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit() {
-    
-    console.log(this.dataArr)
-    console.log(this.isLoadingProgress)
+
+  }
+
+  showInterestOnMap = (evt, i) => {
+    this.currentSelectedIndex = i
+    this.onInterestPicked.emit(i);
   }
 }

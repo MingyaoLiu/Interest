@@ -3,3 +3,13 @@
     width: 90%;
     margin-left: 5%;
 }
+.interestCard {
+    margin-top: 10px;
+}
+.interestCard:hover {
+    background: grey;
+    cursor: pointer;
+}
+.interestCard.selected {
+    background: blue;
+}
