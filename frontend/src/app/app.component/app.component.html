@@ -1,4 +1,4 @@
-<div style="height: 100%; width: 100%; position: absolute; overflow: hidden">
+<div style="height: 100%; width: 100%; position: absolute; overflow: hidden" >
 
   <google-map #gmapView height="100%"
   width="100%"
@@ -14,13 +14,21 @@
       [position]="marker.position"
       [label]="marker.label"
       [title]="marker.title"
+      [animation]= "marker.animation"
       [options]="marker.options"
     >
     </map-marker>
   </google-map>
 </div>
-2
-<app-list-panel id="data_list_panel" #listPanel [isLoading]="lockStartDate" [data]="listData" >
+
+<app-list-panel 
+id="data_list_panel" 
+#listPanel 
+[isLoading]="lockStartDate" 
+[data]="listData" 
+[currentSelectedIndex]="selectedIndex"
+(onInterestPicked)="highlightInterest($event)"
+>
 
 </app-list-panel>
 

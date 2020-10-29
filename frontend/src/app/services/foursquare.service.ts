@@ -10,7 +10,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 export class FoursquareService {
 
   constructor(private httpClient: HttpClient) { }
-  
+
   /**
    * Get all Purchase.
    *
@@ -25,13 +25,13 @@ export class FoursquareService {
         'Content-Type': 'application/json'
       }),
       params: new HttpParams()
-      .set('client_id',environment.fs_c_id)
-      .set('client_secret', environment.fs_c_scrt)
-      .set('v', '20190425')
-      .set('ll',  loc.lat + ',' + loc.lng)
-      .set('radius', '1000')
-      .set('intent','browse')
-      .set('limit', '10')
+        .set('client_id', environment.fs_c_id)
+        .set('client_secret', environment.fs_c_scrt)
+        .set('v', '20190425')
+        .set('ll', loc.lat + ',' + loc.lng)
+        .set('radius', '1000')
+        .set('intent', 'browse')
+        .set('limit', '10')
     };
 
     return this.httpClient.get(apiUrl, httpOptions).pipe(map(this.extractData));
@@ -39,15 +39,15 @@ export class FoursquareService {
 
   private commonAPIResolver = (config) => {
     return new Promise(function (resolve, reject) {
-  
+
       if (config.beforeSend && config.beforeSend instanceof Function) {
         config.beforeSend();
       }
-  
+
       let xhr = new XMLHttpRequest();
-  
+
       xhr.responseType = 'json';
-  
+
       xhr.addEventListener("readystatechange", function () {
         switch (xhr.readyState) {
           case 1:
@@ -78,7 +78,7 @@ export class FoursquareService {
           }
         }
       });
-  
+
       xhr.open(config.type, config.url, config.async || true);
       config.headers.forEach(function (eachHeader) {
         xhr.setRequestHeader(eachHeader.name, eachHeader.value);
@@ -87,9 +87,9 @@ export class FoursquareService {
         typeof config.data === "object" ? JSON.stringify(config.data) : config.data
       );
     });
-  
+
   };
-  
+
   public async getXHRWithResolver(loc: google.maps.LatLngLiteral) {
     return new Promise(async (resolve, reject) => {
       let httpConfig = {
@@ -101,13 +101,13 @@ export class FoursquareService {
           'value': 'application/json'
         }],
         params: new HttpParams()
-        .set('client_id',environment.fs_c_id)
-        .set('client_secret', environment.fs_c_scrt)
-        .set('v', '20190425')
-        .set('ll',  loc.lat + ',' + loc.lng)
-        .set('radius', '1000')
-        .set('intent','browse')
-        .set('limit', '10'),
+          .set('client_id', environment.fs_c_id)
+          .set('client_secret', environment.fs_c_scrt)
+          .set('v', '20190425')
+          .set('ll', loc.lat + ',' + loc.lng)
+          .set('radius', '1000')
+          .set('intent', 'browse')
+          .set('limit', '10'),
       };
       const httpResolveData = await this.commonAPIResolver(httpConfig);
       return httpResolveData;
@@ -117,11 +117,10 @@ export class FoursquareService {
   public async getInterestXHR(loc: google.maps.LatLngLiteral, radius: number) {
     return new Promise(async (resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.withCredentials = false; 
-      xhr.addEventListener("readystatechange", function() {
+      xhr.withCredentials = false;
+      xhr.addEventListener("readystatechange", function () {
         const statusCode = xhr.status;
-        console.log(statusCode)
-        if(this.readyState === 4) {
+        if (this.readyState === 4) {
           if (statusCode >= 200 && statusCode < 300) {
             return resolve(JSON.parse(this.responseText));
           } else {
