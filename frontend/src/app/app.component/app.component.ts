@@ -96,9 +96,10 @@ export class AppComponent {
           title: elem.venue.name,
           options: {
             animation: google.maps.Animation.DROP,
-            opacity: 1
+            opacity: 1,
+
+            zIndex: venueListLength - index
           },
-          zIndex: venueListLength - index
         }
         return newMarker;
       });
@@ -128,12 +129,13 @@ export class AppComponent {
       if (index2 === index) {
         elem.options = {
           animation: google.maps.Animation.BOUNCE,
-          opacity: 1
+          opacity: 1,
+          zIndex: 1000
         };
       } else {
         elem.options = {
           animation: 0,
-          opacity: 0.3
+          opacity: 0.25
         };
       }
     })
